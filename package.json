@@ -9,6 +9,7 @@
   "dependencies": {
     "concurrently": "^7.6.0",
     "esbuild": "^0.17.12",
+    "kaboom": "^2000",
     "prettier": "^2.8.6",
     "serve": "^14.2.0"
   }
