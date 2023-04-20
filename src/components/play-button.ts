@@ -11,7 +11,7 @@ export const addPlayButton = (x: number, y: number) => {
         pos(x, y),
     ])
 
-    play.onClick(() => go(Scenes.GAME))
+    play.onClick(() => go(Scenes.CLOCK_SELECT))
 
     play.onDraw(() => {
         const text = formatText({

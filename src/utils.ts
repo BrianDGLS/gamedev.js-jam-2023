@@ -17,3 +17,9 @@ export const allowClickable = () => {
         hovered.add(_id)
     })
 }
+
+export const minuteHandDegree = (minute: number) => minute * 6
+export const hourHandDegree = (hour: number) => hour * 30
+export const normalizeHour = (hour: number) => (hour % 24) % 12 || 12
+export const getRandomHour = () => Math.floor(rand(0, 24))
+export const getRandomMinute = () => Math.floor(rand(0, 12)) * 5
