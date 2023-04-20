@@ -1,7 +1,10 @@
-import { clamp, makeHoverable } from "../utils"
+import { circleArea } from "../components/circle-area"
+import { allowClickable, clamp } from "../utils"
 import { Scenes } from "./scenes"
 
 export const game = () => {
+    allowClickable()
+
     layers(["bg", "game", "ui"], "game")
 
     const minuteHandDegree = (minute: number) => minute * 6
@@ -32,15 +35,7 @@ export const game = () => {
         pos(width() / 2, height() - 150),
         (origin as any)("center"),
         circle(50),
-        {
-            radius: 50,
-            get width() {
-                return this.radius * 2
-            },
-            get height() {
-                return this.radius * 2
-            },
-        },
+        circleArea(50),
     ])
 
     const life: any = []
@@ -179,21 +174,15 @@ export const game = () => {
     ])
 
     const incrementHourButton = add([
+        "clickable",
         (origin as any)("center"),
         area(),
         layer("ui"),
-        cursor("pointer"),
         pos(110, height() - 60),
         color(255, 0, 0),
         circle(25),
+        circleArea(25),
         {
-            radius: 25,
-            get width() {
-                return this.radius * 2
-            },
-            get height() {
-                return this.radius * 2
-            },
             draw() {
                 const text = formatText({
                     text: " + ",
@@ -213,21 +202,15 @@ export const game = () => {
     })
 
     const decrementHourButton = add([
+        "clickable",
         (origin as any)("center"),
         area(),
         layer("ui"),
-        cursor("pointer"),
         pos(50, height() - 60),
         color(255, 0, 0),
         circle(25),
+        circleArea(25),
         {
-            radius: 25,
-            get width() {
-                return this.radius * 2
-            },
-            get height() {
-                return this.radius * 2
-            },
             draw() {
                 const text = formatText({
                     text: " - ",
@@ -247,21 +230,15 @@ export const game = () => {
     })
 
     const incrementMinuteButton = add([
+        "clickable",
         (origin as any)("center"),
         area(),
         layer("ui"),
-        cursor("pointer"),
         pos(width() - 50, height() - 60),
         color(0, 0, 255),
         circle(25),
+        circleArea(25),
         {
-            radius: 25,
-            get width() {
-                return this.radius * 2
-            },
-            get height() {
-                return this.radius * 2
-            },
             draw() {
                 const text = formatText({
                     text: " + ",
@@ -281,21 +258,15 @@ export const game = () => {
     })
 
     const decrementMinuteButton = add([
+        "clickable",
         (origin as any)("center"),
         area(),
         layer("ui"),
-        cursor("pointer"),
         pos(width() - 110, height() - 60),
         color(0, 0, 255),
         circle(25),
+        circleArea(25),
         {
-            radius: 25,
-            get width() {
-                return this.radius * 2
-            },
-            get height() {
-                return this.radius * 2
-            },
             draw() {
                 const text = formatText({
                     text: " - ",
@@ -313,11 +284,6 @@ export const game = () => {
     decrementMinuteButton.onClick(() => {
         minuteHand.decrementValue()
     })
-
-    makeHoverable(incrementHourButton)
-    makeHoverable(decrementHourButton)
-    makeHoverable(incrementMinuteButton)
-    makeHoverable(decrementMinuteButton)
 
     onUpdate(() => {
         const enemies = get("enemy")

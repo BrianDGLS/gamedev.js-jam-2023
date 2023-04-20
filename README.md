@@ -1,4 +1,4 @@
-# Time Match
+# Digital Destruction
 
 As the player you control the hour and minute hand of an analog clock.
 
