@@ -15,11 +15,6 @@ export const game = (playerSprite: any) => {
 
     layers(["bg", "game", "ui"], "game")
 
-    let spawnBoss = false
-    loop(40, () => {
-        spawnBoss = true
-    })
-
     const score = add([
         layer("ui"),
         text("Score: 0", { size: 24 }),
@@ -52,26 +47,14 @@ export const game = (playerSprite: any) => {
         pos(width() / 2, 0),
         rect(100, 40),
         area(),
-        health(1),
         (origin as any)("center"),
         color(0, 200, 0),
         {
             speed: 80,
             scoreValue: 1,
             targeted: false,
-            bossMode: false,
             hour: getRandomHour(),
             minute: getRandomMinute(),
-            makeBoss() {
-                this.bossMode = true
-                this.heal(3)
-                this.width = this.width * 2
-                this.height = this.height * 2
-                this.speed = this.speed / 2
-                this.scoreValue = 5
-                this.targeted = false
-                this.pos = vec2(rand(-0, width()), 0)
-            },
             update() {
                 this.moveTo(player.pos, this.speed)
             },
@@ -80,15 +63,6 @@ export const game = (playerSprite: any) => {
                 this.targeted = false
                 this.hour = getRandomHour()
                 this.minute = getRandomMinute()
-                if (this.bossMode) {
-                    this.width = this.width / 2
-                    this.height = this.height / 2
-                    this.speed = this.speed * 2
-                    this.health = 1
-                    this.scoreValue = 1
-                    this.bossMode = false
-                }
-                this.heal()
             },
             timeString() {
                 const hour = this.hour.toString()
@@ -101,7 +75,7 @@ export const game = (playerSprite: any) => {
                     text: this.timeString(),
                     font: "sink",
                     origin: "center",
-                    size: this.bossMode ? 48 : 24,
+                    size: 24,
                     color: rgb(0, 0, 0),
                 })
 
@@ -329,9 +303,6 @@ export const game = (playerSprite: any) => {
                     pos(player.pos),
                     area(),
                     move(enemy.pos.angle(player.pos), 1200),
-                    {
-                        damage: 1,
-                    },
                 ])
                 enemy.targeted = true
             }
@@ -339,57 +310,23 @@ export const game = (playerSprite: any) => {
     })
 
     onCollide("projectile", "enemy", (projectile, enemy) => {
-        shake(enemy.bossMode ? 20 : 10)
-        enemy.hurt(projectile.damage)
-
-        if (enemy.hp() > 0) {
-            enemy.hour = getRandomHour()
-            enemy.minute = getRandomMinute()
-            enemy.targeted = false
-        }
-
+        shake(10)
+        enemy.reset()
+        score.value += enemy.scoreValue
         projectile.destroy()
     })
 
-    enemy.onDeath(() => {
-        score.incrementValue(enemy.scoreValue)
-        if (spawnBoss) {
-            if (!enemy.bossMode && score.value > 5) {
-                enemy.makeBoss()
-            }
-            spawnBoss = false
-            enemy.reset()
-        } else {
-            enemy.reset()
-        }
-    })
-
     player.onCollide("enemy", (enemy) => {
-        if (enemy.bossMode) {
-            player.hurt(life.length)
-            shake(30)
-            const initialColor = player.color
-            player.color = rgb(255, 0, 0)
-            wait(0.5, () => {
-                player.color = initialColor
-            })
-            loop(0.2, () => {
-                if (life.length) {
-                    life.pop().destroy()
-                }
-            })
-        } else {
-            player.hurt(1)
-            shake(20)
-            const initialColor = player.color
-            player.color = rgb(200, 100, 0)
-            wait(0.5, () => {
-                player.color = initialColor
-            })
-            enemy.reset()
-            while (life.length > player.hp()) {
-                life.pop().destroy()
-            }
+        player.hurt(1)
+        shake(20)
+        const initialColor = player.color
+        player.color = rgb(200, 100, 0)
+        wait(0.5, () => {
+            player.color = initialColor
+        })
+        enemy.reset()
+        while (life.length > player.hp()) {
+            life.pop().destroy()
         }
     })
 
