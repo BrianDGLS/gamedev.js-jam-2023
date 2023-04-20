@@ -358,6 +358,7 @@ export const game = (playerSprite: any) => {
                 enemy.makeBoss()
             }
             spawnBoss = false
+            enemy.reset()
         } else {
             enemy.reset()
         }
