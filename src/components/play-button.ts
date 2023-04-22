@@ -3,7 +3,7 @@ import { Scenes } from "../scenes/scenes"
 export const addPlayButton = (x: number, y: number) => {
     const play = add([
         "clickable",
-        rect(250, 50),
+        rect(width() / 2, 50),
         color(0, 0, 0),
         (origin as any)("center"),
         area(),

@@ -1,22 +1,40 @@
-import { circleArea } from "../components/circle-area"
 import { allowClickable } from "../utils"
-import { Scenes } from "./scenes"
+import { GameScenes } from "./scenes"
+
+export class ClockSelection {
+    constructor(
+        public sprite: string,
+        public width: number,
+        public height: number,
+    ) {}
+
+    getKaboomSprite() {
+        return sprite(this.sprite, { width: this.width, height: this.height })
+    }
+}
 
 export const clockSelect = () => {
     allowClickable()
 
-    let sprites = [rgb(255, 255, 255), rgb(255, 255, 0), rgb(255, 0, 255)]
-    let playerSprite = sprites[0]
+    add([sprite("bg", { width: width(), height: height() })])
+
+    add([text("Select a clock", { size: 28}), (origin as any)("center"), pos(width() / 2, 100)])
+
+    const sprites: ClockSelection[] = [
+        new ClockSelection("alarm-clock", 214, 214),
+        new ClockSelection("pocket-watch", 155, 179),
+        new ClockSelection("mantelpiece-clock", 216, 216),
+    ]
+    let playerSprite = sprites[0].getKaboomSprite()
 
     for (let i = 1; i <= sprites.length; i++) {
         add([
             "option",
             "clickable",
             area(),
-            circle(50),
-            circleArea(50),
-            pos(i * 130, 200),
-            color(sprites[i - 1]),
+            pos(i * 130, 300),
+            scale(0.5),
+            sprites[i - 1].getKaboomSprite(),
             (origin as any)("center"),
             { value: sprites[i - 1] },
         ])
@@ -28,18 +46,18 @@ export const clockSelect = () => {
             color(0, 0, 0),
             (origin as any)("center"),
             area(),
-            pos(i * 130, 320),
+            pos(i * 130, 400),
             outline(4, rgb(255, 255, 255)),
             {
                 value: sprites[i - 1],
                 selected: i === 1,
                 draw() {
                     const text = formatText({
-                        text: this.selected ? "Selected" : "Selected",
-                        size: 18,
+                        text: this.selected ? "Selected" : "Select",
+                        size: 16,
                         origin: "center",
                         color: this.selected
-                            ? rgb(100, 0, 200)
+                            ? rgb(200, 0, 200)
                             : rgb(255, 255, 255),
                     })
 
@@ -54,7 +72,7 @@ export const clockSelect = () => {
             btn.selected = false
         }
         clicked.selected = true
-        playerSprite = clicked.value
+        playerSprite = clicked.value.getKaboomSprite()
     }
 
     onClick("select-button", select)
@@ -73,7 +91,7 @@ export const clockSelect = () => {
         pos(width() / 2, height() - 100),
     ])
 
-    start.onClick(() => go(Scenes.GAME, playerSprite))
+    start.onClick(() => go(GameScenes.GAME, playerSprite))
 
     start.onDraw(() => {
         const text = formatText({

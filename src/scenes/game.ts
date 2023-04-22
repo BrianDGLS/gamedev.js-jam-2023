@@ -1,4 +1,3 @@
-import { circleArea } from "../components/circle-area"
 import {
     allowClickable,
     clamp,
@@ -8,12 +7,14 @@ import {
     minuteHandDegree,
     normalizeHour,
 } from "../utils"
-import { Scenes } from "./scenes"
+import { GameScenes } from "./scenes"
 
-export const game = (playerSprite: any) => {
+export const game = (playerSprite: string) => {
     allowClickable()
 
     layers(["bg", "game", "ui"], "game")
+
+    add([layer("bg"), sprite("bg", { width: width(), height: height() })])
 
     const score = add([
         layer("ui"),
@@ -33,24 +34,26 @@ export const game = (playerSprite: any) => {
     const player = add([
         "player",
         area(),
-        health(3),
         layer("ui"),
         pos(width() / 2, height() - 150),
         (origin as any)("center"),
-        color(playerSprite),
-        circle(50),
-        circleArea(50),
+        playerSprite,
+        {
+            radius: 55,
+            centerPos() {
+                return pos(this.pos.x, this.pos.y + 25)
+            },
+        },
     ])
 
     const enemy = add([
         "enemy",
         pos(width() / 2, 0),
-        rect(100, 40),
+        sprite("digital-clock", { width: 138, height: 63 }),
         area(),
         (origin as any)("center"),
-        color(0, 200, 0),
         {
-            speed: 80,
+            speed: 40,
             scoreValue: 1,
             targeted: false,
             hour: getRandomHour(),
@@ -75,7 +78,7 @@ export const game = (playerSprite: any) => {
                     text: this.timeString(),
                     font: "sink",
                     origin: "center",
-                    size: 24,
+                    size: 22,
                     color: rgb(0, 0, 0),
                 })
 
@@ -84,23 +87,41 @@ export const game = (playerSprite: any) => {
         },
     ])
 
-    const life: any = []
-    for (let i = 1; i <= player.hp(); i++) {
-        life.push(
-            add([
-                "life",
-                layer("ui"),
-                area(),
-                pos(width() - i * 30, 20),
-                circle(10),
-            ]),
-        )
-    }
+    const lifeBar = add([
+        "life-bar",
+        health(3),
+        {
+            draw() {
+                let spriteToDraw: string
+                switch (this.hp()) {
+                    case 3:
+                        spriteToDraw = "life-bar"
+                        break
+                    case 2:
+                        spriteToDraw = "life-bar-2-health"
+                        break
+                    case 1:
+                        spriteToDraw = "life-bar-1-health"
+                        break
+                    default:
+                        spriteToDraw = "life-bar-dead"
+                }
+
+                drawSprite({
+                    sprite: spriteToDraw,
+                    pos: vec2(width() - 200, 20),
+                    flipX: true,
+                    width: 174,
+                    height: 33,
+                })
+            },
+        },
+    ])
 
     const hourHand = add([
         "hourHand",
         layer("ui"),
-        pos(player.pos),
+        player.centerPos(),
         color(rgb(255, 0, 0)),
         rotate(0),
         {
@@ -140,7 +161,7 @@ export const game = (playerSprite: any) => {
     const minuteHand = add([
         "minuteHand",
         layer("ui"),
-        pos(player.pos),
+        player.centerPos(),
         color(rgb(255, 0, 0)),
         rotate(0),
         {
@@ -182,23 +203,9 @@ export const game = (playerSprite: any) => {
         (origin as any)("center"),
         area(),
         layer("ui"),
-        pos(110, height() - 60),
-        color(255, 0, 0),
-        circle(25),
-        circleArea(25),
-        {
-            draw() {
-                const text = formatText({
-                    text: " + ",
-                    font: "sink",
-                    origin: "center",
-                    size: 40,
-                    color: rgb(0, 0, 0),
-                })
-
-                drawFormattedText(text)
-            },
-        },
+        pos(135, height() - 60),
+        scale(0.5),
+        sprite("plus-button", { width: 150, height: 152 }),
     ])
 
     incrementHourButton.onClick(() => {
@@ -210,23 +217,9 @@ export const game = (playerSprite: any) => {
         (origin as any)("center"),
         area(),
         layer("ui"),
-        pos(50, height() - 60),
-        color(255, 0, 0),
-        circle(25),
-        circleArea(25),
-        {
-            draw() {
-                const text = formatText({
-                    text: " - ",
-                    font: "sink",
-                    origin: "center",
-                    size: 40,
-                    color: rgb(0, 0, 0),
-                })
-
-                drawFormattedText(text)
-            },
-        },
+        pos(50, height() - 80),
+        scale(0.5),
+        sprite("minus-button", { width: 150, height: 152 }),
     ])
 
     decrementHourButton.onClick(() => {
@@ -238,23 +231,9 @@ export const game = (playerSprite: any) => {
         (origin as any)("center"),
         area(),
         layer("ui"),
-        pos(width() - 50, height() - 60),
-        color(0, 0, 255),
-        circle(25),
-        circleArea(25),
-        {
-            draw() {
-                const text = formatText({
-                    text: " + ",
-                    font: "sink",
-                    origin: "center",
-                    size: 40,
-                    color: rgb(0, 0, 0),
-                })
-
-                drawFormattedText(text)
-            },
-        },
+        pos(width() - 50, height() - 80),
+        scale(0.5),
+        sprite("plus-button", { width: 150, height: 152 }),
     ])
 
     incrementMinuteButton.onClick(() => {
@@ -266,23 +245,9 @@ export const game = (playerSprite: any) => {
         (origin as any)("center"),
         area(),
         layer("ui"),
-        pos(width() - 110, height() - 60),
-        color(0, 0, 255),
-        circle(25),
-        circleArea(25),
-        {
-            draw() {
-                const text = formatText({
-                    text: " - ",
-                    font: "sink",
-                    origin: "center",
-                    size: 40,
-                    color: rgb(0, 0, 0),
-                })
-
-                drawFormattedText(text)
-            },
-        },
+        pos(width() - 135, height() - 60),
+        scale(0.5),
+        sprite("minus-button", { width: 150, height: 152 }),
     ])
 
     decrementMinuteButton.onClick(() => {
@@ -299,7 +264,7 @@ export const game = (playerSprite: any) => {
             ) {
                 add([
                     "projectile",
-                    rect(10, 10),
+                    sprite("firework", { height: 40 }),
                     pos(player.pos),
                     area(),
                     move(enemy.pos.angle(player.pos), 1200),
@@ -317,7 +282,7 @@ export const game = (playerSprite: any) => {
     })
 
     player.onCollide("enemy", (enemy) => {
-        player.hurt(1)
+        lifeBar.hurt(1)
         shake(20)
         const initialColor = player.color
         player.color = rgb(200, 100, 0)
@@ -325,13 +290,10 @@ export const game = (playerSprite: any) => {
             player.color = initialColor
         })
         enemy.reset()
-        while (life.length > player.hp()) {
-            life.pop().destroy()
-        }
     })
 
-    player.onDeath(() => {
-        wait(2, () => go(Scenes.GAME_OVER, score.value))
+    lifeBar.onDeath(() => {
+        wait(2, () => go(GameScenes.GAME_OVER, score.value))
     })
 
     onKeyPress("left", () => {

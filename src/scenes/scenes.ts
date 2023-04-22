@@ -1,4 +1,4 @@
-export enum Scenes {
+export enum GameScenes {
     GAME = "game",
     GAME_OVER = "game-over",
     START_MENU = "start-menu",
