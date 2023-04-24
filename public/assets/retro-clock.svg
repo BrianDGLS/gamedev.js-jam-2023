@@ -1,0 +1,24 @@
+<svg width="177" height="216" viewBox="0 0 177 216" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="path-1-inside-1_422_185" fill="white">
+<path d="M0 80C0 35.8172 35.8172 0 80 0H97C141.183 0 177 35.8172 177 80V195C177 200.523 172.523 205 167 205H10C4.47715 205 0 200.523 0 195V80Z"/>
+</mask>
+<path d="M0 80C0 35.8172 35.8172 0 80 0H97C141.183 0 177 35.8172 177 80V195C177 200.523 172.523 205 167 205H10C4.47715 205 0 200.523 0 195V80Z" fill="#BC5F26"/>
+<path d="M80 4H97V-4H80V4ZM173 80V195H181V80H173ZM167 201H10V209H167V201ZM4 195V80H-4V195H4ZM10 201C6.68629 201 4 198.314 4 195H-4C-4 202.732 2.26801 209 10 209V201ZM173 195C173 198.314 170.314 201 167 201V209C174.732 209 181 202.732 181 195H173ZM97 4C138.974 4 173 38.0264 173 80H181C181 33.6081 143.392 -4 97 -4V4ZM80 -4C33.6081 -4 -4 33.6081 -4 80H4C4 38.0264 38.0264 4 80 4V-4Z" fill="black" mask="url(#path-1-inside-1_422_185)"/>
+<path d="M7 91C7 46.8172 42.8172 11 87 11H89C133.183 11 169 46.8172 169 91V175C169 180.523 164.523 185 159 185H17C11.4772 185 7 180.523 7 175V91Z" fill="#80341A"/>
+<circle cx="87" cy="101" r="71" fill="white" stroke="#F4B430" stroke-width="8"/>
+<rect x="13" y="203" width="14" height="12" fill="#BC5F26" stroke="black" stroke-width="2"/>
+<rect x="150" y="203" width="14" height="12" fill="#BC5F26" stroke="black" stroke-width="2"/>
+<rect x="88" y="41" width="3" height="10" fill="black"/>
+<rect x="119.922" y="49" width="3" height="10" transform="rotate(43.8091 119.922 49)" fill="black"/>
+<rect x="136.941" y="69" width="3" height="10" transform="rotate(52.5774 136.941 69)" fill="black"/>
+<rect x="129" y="124.225" width="3" height="10" transform="rotate(-47.8703 129 124.225)" fill="black"/>
+<rect x="112" y="142.745" width="3" height="10" transform="rotate(-35.5776 112 142.745)" fill="black"/>
+<rect x="64.2227" y="141" width="3" height="10" transform="rotate(38.4829 64.2227 141)" fill="black"/>
+<rect x="44.25" y="122" width="3" height="10" transform="rotate(55.5883 44.25 122)" fill="black"/>
+<rect x="45.8115" y="74.9738" width="3" height="10" transform="rotate(126.682 45.8115 74.9738)" fill="black"/>
+<rect x="66.0957" y="56.3027" width="3" height="10" transform="rotate(146.481 66.0957 56.3027)" fill="black"/>
+<rect x="88" y="151" width="3" height="10" fill="black"/>
+<rect x="138" y="102" width="3" height="10" transform="rotate(-90 138 102)" fill="black"/>
+<rect x="26" y="102" width="3" height="10" transform="rotate(-90 26 102)" fill="black"/>
+<circle cx="89" cy="100" r="5" fill="black"/>
+</svg>

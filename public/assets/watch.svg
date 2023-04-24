@@ -1,0 +1,24 @@
+<svg width="160" height="222" viewBox="0 0 160 222" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M44.0329 199.003L45.0329 199.001L45.0014 174.001L40.0014 174.008L40.0279 195.008C40.0307 197.217 41.8238 199.005 44.0329 199.003Z" fill="#CF8526" stroke="black" stroke-width="2"/>
+<path d="M112.033 199.006L110.033 199.009L110.001 174.009L116.001 174.001L116.028 195.001C116.031 197.21 114.242 199.003 112.033 199.006Z" fill="#CF8526" stroke="black" stroke-width="2"/>
+<circle cx="75" cy="110" r="69" fill="white" stroke="#F4B430" stroke-width="12"/>
+<path d="M43 20H45V45H39V24C39 21.7909 40.7909 20 43 20Z" fill="#CF8526" stroke="black" stroke-width="2"/>
+<path d="M111 20H110V45H115V24C115 21.7909 113.209 20 111 20Z" fill="#CF8526" stroke="black" stroke-width="2"/>
+<rect x="149" y="102" width="10" height="14" rx="4" fill="#F4B430" stroke="black" stroke-width="2"/>
+<circle cx="76" cy="111" r="74" stroke="black" stroke-width="4"/>
+<rect x="48" y="2" width="59" height="31" rx="3" fill="#264C59" stroke="black" stroke-width="4"/>
+<rect x="48" y="189" width="59" height="31" rx="3" fill="#264C59" stroke="black" stroke-width="4"/>
+<rect x="76" y="51" width="3" height="10" fill="black"/>
+<rect x="107.922" y="59" width="3" height="10" transform="rotate(43.8091 107.922 59)" fill="black"/>
+<rect x="124.942" y="79" width="3" height="10" transform="rotate(52.5774 124.942 79)" fill="black"/>
+<rect x="117" y="134.225" width="3" height="10" transform="rotate(-47.8703 117 134.225)" fill="black"/>
+<rect x="100" y="152.745" width="3" height="10" transform="rotate(-35.5776 100 152.745)" fill="black"/>
+<rect x="52.2227" y="151" width="3" height="10" transform="rotate(38.4829 52.2227 151)" fill="black"/>
+<rect x="32.25" y="132" width="3" height="10" transform="rotate(55.5883 32.25 132)" fill="black"/>
+<rect x="33.8115" y="84.9738" width="3" height="10" transform="rotate(126.682 33.8115 84.9738)" fill="black"/>
+<rect x="54.0952" y="66.3027" width="3" height="10" transform="rotate(146.481 54.0952 66.3027)" fill="black"/>
+<rect x="76" y="161" width="3" height="10" fill="black"/>
+<rect x="126" y="112" width="3" height="10" transform="rotate(-90 126 112)" fill="black"/>
+<rect x="14" y="112" width="3" height="10" transform="rotate(-90 14 112)" fill="black"/>
+<circle cx="78" cy="111" r="3" fill="#F4B430" stroke="black" stroke-width="2"/>
+</svg>
