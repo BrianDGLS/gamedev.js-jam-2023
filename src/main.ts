@@ -70,11 +70,12 @@ class ClockSelect extends Phaser.Scene {
     }
 
     styleButton(btn: Phaser.GameObjects.Rectangle) {
-        btn.setInteractive({ cursor: "pointer" }).setStrokeStyle(2, 0x000)
-        .setFillStyle(0xd2634e)
+        btn.setInteractive({ cursor: "pointer" })
+            .setStrokeStyle(2, 0x000)
+            .setFillStyle(0xd2634e)
 
         btn.on("pointerdown", () => {
-            btn.setScale(.9)
+            btn.setScale(0.9)
         })
 
         btn.on("pointerup", () => {
@@ -201,6 +202,7 @@ class Game extends Phaser.Scene {
     selectedSprite = ClockSprite.DEFAULT
 
     score = 0
+
     clock: Clock
     bullet: Bullet
     digitalClock: DigitalClock
@@ -307,14 +309,14 @@ class Game extends Phaser.Scene {
                 break
             default:
                 x = x - 2
-                y = y -1
+                y = y - 1
         }
         return this.add
-        .sprite(x, y, "clock-hand")
-        .setOrigin(0.5, 1)
-        .setScale(1.2, 0.7)
-        .setTint(tint)
-        .setRotation(hourHandRadians(this.clock.hour))
+            .sprite(x, y, "clock-hand")
+            .setOrigin(0.5, 1)
+            .setScale(1.2, 0.7)
+            .setTint(tint)
+            .setRotation(hourHandRadians(this.clock.hour))
     }
 
     setUpMinuteHand(): Phaser.GameObjects.Sprite {
@@ -348,7 +350,7 @@ class Game extends Phaser.Scene {
             .setDepth(-2)
         switch (this.selectedSprite) {
             case ClockSprite.SQUARE_CLOCK:
-                this.themeTint = 0x00FFFF
+                this.themeTint = 0x00ffff
                 break
             case ClockSprite.RETRO_CLOCK:
                 this.themeTint = 0x7700ff
@@ -385,8 +387,6 @@ class Game extends Phaser.Scene {
     }
 
     create() {
-        const { width, height } = this.sys.game.canvas
-
         this.setBackgroundTint()
         this.clock = this.setUpClock(this.selectedSprite)
         this.hourHand = this.setUpHourHand()
@@ -396,8 +396,6 @@ class Game extends Phaser.Scene {
         this.setUpPointerInput()
 
         this.digitalClock = this.setUpDigitalClock()
-
-        // this.add.circle(width / 2, height - 120, 75, 0x000)
 
         this.scoreBar = this.add.image(90, 30, "score")
         this.scoreText = this.add
@@ -491,6 +489,38 @@ class Game extends Phaser.Scene {
             this.clock.health -= 1
             this.lifeBar.destroy(true)
             this.lifeBar = this.getLifeBar(this.clock.health)
+
+            if (this.clock.health <= 0) {
+                const { width, height } = this.sys.canvas
+                this.createExplosion(
+                    this.clock.sprite.x,
+                    this.clock.sprite.y,
+                    300,
+                )
+
+                setTimeout(() => {
+                    this.createExplosion(
+                        this.clock.sprite.x,
+                        this.clock.sprite.y,
+                        200,
+                    )
+                }, 500)
+
+                setTimeout(() => {
+                    this.createExplosion(
+                        this.clock.sprite.x,
+                        this.clock.sprite.y,
+                        100,
+                    )
+                }, 1000)
+
+                setTimeout(() => {
+                    this.scene.start(GameScenes.GAME_OVER, {
+                        score: this.score,
+                        themeTint: this.themeTint,
+                    })
+                }, 2000)
+            }
         }, shakeDuration)
     }
 
@@ -614,6 +644,218 @@ class Game extends Phaser.Scene {
     }
 }
 
+export class GameOver extends Phaser.Scene {
+    score = 0
+    themeTint: number
+
+    constructor() {
+        super({ key: GameScenes.GAME_OVER })
+    }
+
+    init({ score, themeTint }: { score: number; themeTint: number }) {
+        this.score = score
+        this.themeTint = themeTint
+    }
+
+    preload() {
+        this.load.path = "/assets/"
+        this.load.image("background", "bg.png")
+    }
+
+    create() {
+        const { width, height } = this.sys.game.canvas
+
+        const bg = this.add
+            .image(width / 2, height / 2, "background")
+            .setTint(this.themeTint)
+            .setDepth(-2)
+
+        this.add
+            .text(width / 2, 200, "Game Over", {
+                fontFamily: "franchise, monospace",
+                fontSize: 72,
+            })
+            .setOrigin(0.5, 0.5)
+
+        this.add
+            .text(width / 2, 250, "You Scored: " + this.score, {
+                fontFamily: "monospace",
+                fontSize: 24,
+            })
+            .setOrigin(0.5, 0.5)
+
+        const scores = localStorage.getItem("scores")
+        if (scores) {
+            localStorage.setItem(
+                "scores",
+                JSON.stringify(JSON.parse(scores).concat([this.score])),
+            )
+        } else {
+            localStorage.setItem("scores", JSON.stringify([this.score]))
+        }
+
+        const scoreArray: string[] = JSON.parse(
+            localStorage.getItem("scores") ?? "",
+        )
+
+        if (scoreArray) {
+            this.add
+                .text(width / 2, 280, "Top Scores", {
+                    fontFamily: "monospace",
+                    fontSize: 16,
+                })
+                .setOrigin(0.5, 0.5)
+            let y = 300
+            for (const [index, score] of scoreArray
+                .map((s) => parseInt(s))
+                .sort((a, b) => (a > b ? -1 : 1))
+                .slice(0, 5)
+                .entries()) {
+                this.add
+                    .text(width / 2, y + 20 * index, index + 1 + ". " + score, {
+                        fontFamily: "monospace",
+                        fontSize: 16,
+                    })
+                    .setOrigin(0.5, 0.5)
+            }
+        }
+
+        this.addStartButton()
+    }
+
+    addStartButton() {
+        let { width } = this.sys.game.canvas
+        const btn = this.add.rectangle(width / 2, 725, 200, 50, 0xd2634e, 0)
+
+        this.styleButton(btn)
+
+        btn.on("pointerup", () => this.scene.start(GameScenes.CLOCK_SELECT))
+
+        const text = this.add.text(width / 2, 725, "Play Again", {
+            fontFamily: "Arial",
+            fontSize: 28,
+            color: "#fff",
+            align: "center",
+        })
+        Phaser.Display.Align.In.Center(text, btn)
+    }
+
+    styleButton(btn: Phaser.GameObjects.Rectangle) {
+        btn.setInteractive({ cursor: "pointer" })
+            .setStrokeStyle(2, 0x000)
+            .setFillStyle(0xd2634e)
+
+        btn.on("pointerdown", () => {
+            btn.setScale(0.9)
+        })
+
+        btn.on("pointerup", () => {
+            btn.setScale(1)
+        })
+
+        btn.on("pointerover", () => {
+            btn.setStrokeStyle(3, 0x000)
+        })
+
+        btn.on("pointerout", () => {
+            btn.setStrokeStyle(2, 0x000)
+        })
+    }
+}
+
+export class StartMenu extends Phaser.Scene {
+    constructor() {
+        super({ key: GameScenes.START_MENU })
+    }
+
+    preload() {
+        this.load.path = "/assets/"
+        this.load.image("background", "bg.png")
+    }
+
+    create() {
+        const { width, height } = this.sys.game.canvas
+
+        const bg = this.add
+            .image(width / 2, height / 2, "background")
+            .setDepth(-2)
+
+        this.add
+            .text(width / 2, 200, "Time Match", {
+                fontFamily: "franchise, monospace",
+                fontSize: 58,
+            })
+            .setOrigin(0.5, 0.5)
+
+        const scoreArray: string[] = JSON.parse(
+            localStorage.getItem("scores") ?? "",
+        )
+
+        if (scoreArray) {
+            this.add
+                .text(width / 2, 280, "Top Scores", {
+                    fontFamily: "monospace",
+                    fontSize: 16,
+                })
+                .setOrigin(0.5, 0.5)
+            let y = 300
+            for (const [index, score] of scoreArray
+                .map((s) => parseInt(s))
+                .sort((a, b) => (a > b ? -1 : 1))
+                .slice(0, 5)
+                .entries()) {
+                this.add
+                    .text(width / 2, y + 20 * index, index + 1 + ". " + score, {
+                        fontFamily: "monospace",
+                        fontSize: 16,
+                    })
+                    .setOrigin(0.5, 0.5)
+            }
+        }
+
+        this.addStartButton()
+    }
+
+    addStartButton() {
+        let { width } = this.sys.game.canvas
+        const btn = this.add.rectangle(width / 2, 725, 200, 50, 0xd2634e, 0)
+
+        this.styleButton(btn)
+
+        btn.on("pointerup", () => this.scene.start(GameScenes.CLOCK_SELECT))
+
+        const text = this.add.text(width / 2, 725, "Play", {
+            fontFamily: "Arial",
+            fontSize: 28,
+            color: "#fff",
+            align: "center",
+        })
+        Phaser.Display.Align.In.Center(text, btn)
+    }
+
+    styleButton(btn: Phaser.GameObjects.Rectangle) {
+        btn.setInteractive({ cursor: "pointer" })
+            .setStrokeStyle(2, 0x000)
+            .setFillStyle(0xd2634e)
+
+        btn.on("pointerdown", () => {
+            btn.setScale(0.9)
+        })
+
+        btn.on("pointerup", () => {
+            btn.setScale(1)
+        })
+
+        btn.on("pointerover", () => {
+            btn.setStrokeStyle(3, 0x000)
+        })
+
+        btn.on("pointerout", () => {
+            btn.setStrokeStyle(2, 0x000)
+        })
+    }
+}
+
 const config = {
     type: Phaser.AUTO,
     width: 375,
@@ -626,7 +868,7 @@ const config = {
             debug: false,
         },
     },
-    scene: [ClockSelect, Game],
+    scene: [StartMenu, ClockSelect, Game, GameOver],
     // scene: [Game],
 }
 
