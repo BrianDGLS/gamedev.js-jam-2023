@@ -1,9 +1,15 @@
-# Digital Destruction
+# Time Match
 
-As the player you control the hour and minute hand of an analog clock.
+It's time for analog to fight back!
 
-Digital clocks will begin to spawn from outside the screen. These will come from North, South, East, and West.
-They will move towards the player controlled clock. The player must move the hour and minute hands of the analog
-clock to match the time on the digital clock when they collide.
+The evil digital clocks have left their home galaxy of the Digital Nebula and come to invade the peaceful Analog Star Cluster.
 
-The speed of the digital clocks will increase over time.
+Choose one of three analog heroes to represent you in the fight against digitization.
+
+A special targeting system has been developed by the Analog War engineers. To use it you must match the time on the incoming digital clock, using the hour and minute hands. Once they match, a special homing missile will be fired to destroy the evil digital tyrant.
+
+But be careful, if the digital clock strikes the analog clock it will loose one of it's three lives.
+
+Score high and you will be rewarded with your own spot on the galactic score board.
+
+May the seconds be with you!

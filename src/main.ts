@@ -3,7 +3,6 @@
  */
 
 import Phaser from "phaser"
-import { GameScenes } from "./scenes/scenes"
 import {
     clamp,
     decrementHour,
@@ -14,6 +13,13 @@ import {
     minuteHandRadians,
     normalizeHour,
 } from "./utils"
+
+export enum GameScenes {
+    START_MENU = "start-menu",
+    CLOCK_SELECT = "clock-select",
+    GAME = "game",
+    LOADING = "loading",
+}
 
 export enum ClockSprite {
     RETRO_CLOCK = "retro-clock",
@@ -512,7 +518,7 @@ class Game extends Phaser.Scene {
             this.lifeBar.destroy(true)
             this.lifeBar = this.getLifeBar(this.clock.health)
 
-            if(this.clock.health === 1) {
+            if (this.clock.health === 1) {
                 this.music.stop()
                 this.bossMusic.play()
             }
@@ -743,7 +749,7 @@ export class StartMenu extends Phaser.Scene {
                 .setOrigin(0.5, 0.5)
 
             this.add
-                .text(width / 2, 350, "You Scored: " + this.score, {
+                .text(width / 2, 330, "You Scored: " + this.score, {
                     fontFamily: "monospace",
                     fontSize: 24,
                 })
@@ -757,12 +763,12 @@ export class StartMenu extends Phaser.Scene {
 
             if (scoreArray) {
                 this.add
-                    .text(width / 2, 340, "Top Scores", {
+                    .text(width / 2, 380, "Top Scores", {
                         fontFamily: "monospace",
                         fontSize: 32,
                     })
                     .setOrigin(0.5, 0.5)
-                let y = 380
+                let y = 420
                 for (const [index, score] of scoreArray
                     .map((s) => parseInt(s))
                     .sort((a, b) => (a > b ? -1 : 1))
@@ -836,7 +842,7 @@ class Loading extends Phaser.Scene {
     maxDots = 3
     text: Phaser.GameObjects.Text
     constructor() {
-        super({ key: "loading" })
+        super({ key: GameScenes.LOADING })
     }
 
     preload() {
